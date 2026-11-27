@@ -30,16 +30,53 @@ abstract class Item {
 ' TODO: add boxes for Book and DVD. What differs between them — a whole class,
 '       or just the value of a loan-period field?
 
+class Book {
+  - loanPeriodWeeks : int = 3
+}
+
+class DVD {
+  - loanPeriodWeeks : int = 1
+}
+
 ' TODO: reference-only items cannot be borrowed at all. Decide how to say that
 '       in the diagram: a subclass, or an interface (e.g. "Borrowable") that
 '       only some items realize?
 
+class ReferenceOnlyItem
+
+interface Borrowable {
+  + borrow() : void
+  + returnItem() : void
+}
+
 ' TODO: add Member and Librarian. What do they have in common? Add the common
 '       supertype if you think one is warranted.
+
+class Member {
+  - memberNumber : String
+  + placeHold(item : Item) : Hold
+}
+
+class Librarian {
+  + addItem(item : Item) : void
+  + putItemOnHold(member : Member) : void
+}
 
 ' TODO: add whatever represents a hold, and connect it to the classes that need
 '       to know about it.
 
+class Hold
+Member -- Hold
+Hold -- Item
+
 ' TODO: add the arrows between all of your types.
+
+Item <|-- Book
+Item <|-- DVD
+Item <|-- ReferenceOnlyItem
+Borrowable <|.. Book
+Borrowable <|.. DVD
+Librarian --> Item : adds
+Librarian --> Member : puts item on hold
 
 @enduml
